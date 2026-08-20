@@ -19,6 +19,7 @@ import { LeadForm, type LeadValues } from "@/components/site/LeadForm";
 import { Button } from "@/components/ui/button";
 import { BUSINESS } from "@/lib/services";
 import { cn } from "@/lib/utils";
+import { postStepData } from "@/lib/submitLead";
 
 const TITLE = "Welcome - Build Your Booking | Aart Cleaning Services";
 const DESCRIPTION =
@@ -142,6 +143,7 @@ function WelcomePage() {
 
   const submitStep1 = () => {
     if (coords) {
+      postStepData({ step: "location", email: lead?.email, coords });
       setStep(3);
       return;
     }
@@ -149,7 +151,10 @@ function WelcomePage() {
       (k) => address[k].trim() === "",
     );
     setAddressErrors(missing);
-    if (missing.length === 0) setStep(3);
+    if (missing.length === 0) {
+      postStepData({ step: "location", email: lead?.email, ...address });
+      setStep(3);
+    }
   };
 
   const confirmBooking = () => {
@@ -158,6 +163,18 @@ function WelcomePage() {
     if (startHour === null) errs.push("time");
     setStep2Errors(errs);
     if (errs.length > 0) return;
+
+    postStepData({
+      step: "booking",
+      email: lead?.email,
+      date,
+      startHour,
+      duration,
+      cleaners,
+      frequency,
+      total: quote.total,
+    });
+
     navigate({ to: "/thank-you" });
   };
 

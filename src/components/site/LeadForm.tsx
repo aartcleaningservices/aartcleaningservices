@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BadgePercent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { postStepData } from "@/lib/submitLead";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
@@ -68,6 +69,8 @@ export function LeadForm({ onComplete }: Props) {
     } catch {
       /* storage unavailable - continue anyway */
     }
+
+    postStepData({ step: "lead", ...clean });
     onComplete(clean);
   };
 

@@ -258,7 +258,7 @@ export const BUSINESS = {
   phoneHref:
     "https://api.whatsapp.com/send?phone=60135519772&text=I%20want%20to%20book%20a%20cleaning%20service%20and%20claim%20my%2010%25%20first-time%20discount.",
   waHref: "https://wa.me/60135519772",
-  email: "aartcleaningservices@gmail.com",
+  email: "nora@aartcleaning.my",
   area: "Klang, Shah Alam, Subang, and Kota Kemuning",
   baseRate: 25,
 };
