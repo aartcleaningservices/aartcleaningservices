@@ -74,7 +74,7 @@ function ThankYouPage() {
             <Link to="/">Back to home</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
+            <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
               <Phone className="size-4" /> {BUSINESS.phone}
             </a>
           </Button>

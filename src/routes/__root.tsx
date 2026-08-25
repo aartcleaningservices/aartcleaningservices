@@ -31,7 +31,7 @@ function NotFoundComponent() {
           Go home
         </Link>
         <Link
-          to="/welcome"
+          to="/bookings"
           className="rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold"
         >
           Book a cleaning

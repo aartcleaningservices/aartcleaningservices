@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ServicePageLayout } from "@/components/site/ServicePageLayout";
 import { getService } from "@/lib/services";
-import heroImage from "@/assets/service-office.webp";
+import heroImage from "@/assets/service-move.webp";
 
-const service = getService("factory-office-cleaning");
+const service = getService("move-in-cleaning");
 
-export const Route = createFileRoute("/services/factory-office-cleaning")({
+export const Route = createFileRoute("/services/move-in-cleaning")({
   head: () => ({
     meta: [
       { title: service.metaTitle },
@@ -19,6 +19,10 @@ export const Route = createFileRoute("/services/factory-office-cleaning")({
     links: [{ rel: "canonical", href: service.path }],
   }),
   component: () => (
-    <ServicePageLayout service={service} heroImage={heroImage} heroAlt="Cleaner polishing the floor of a spotless open-plan office and factory space" />
+    <ServicePageLayout
+      service={service}
+      heroImage={heroImage}
+      heroAlt="Cleaner wiping empty kitchen cabinets in a unit ready for move in"
+    />
   ),
 });

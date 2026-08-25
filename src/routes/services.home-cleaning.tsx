@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ServicePageLayout } from "@/components/site/ServicePageLayout";
 import { getService } from "@/lib/services";
+import heroImage from "@/assets/service-home.webp";
 
 const service = getService("home-cleaning");
 
@@ -17,5 +18,7 @@ export const Route = createFileRoute("/services/home-cleaning")({
     ],
     links: [{ rel: "canonical", href: service.path }],
   }),
-  component: () => <ServicePageLayout service={service} />,
+  component: () => (
+    <ServicePageLayout service={service} heroImage={heroImage} heroAlt="Cleaner tidying a bright, freshly cleaned Malaysian condo living room" />
+  ),
 });

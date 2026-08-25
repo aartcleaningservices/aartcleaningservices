@@ -4,16 +4,15 @@ import { BUSINESS, services } from "@/lib/services";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border bg-secondary/40">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
+    <footer className="mt-16 border-t border-border bg-secondary/40">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
           <p className="font-display text-xl font-bold">{BUSINESS.name}</p>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
-            Our local cleaning staffs serve {BUSINESS.area}. We offer cleaning service to homes, offices, factories,
-            post-renovation units and retail spaces.
+            Our local cleaning services helps homeowners, landlords, businesses and property operators keep their spaces clean, presentable and ready for what comes next.
           </p>
           <div className="mt-5 space-y-2 text-sm">
-            <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-semibold">
+            <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-semibold">
               <Phone className="size-4 text-primary" /> {BUSINESS.phone}
             </a>
             <a href={`mailto:${BUSINESS.email}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
@@ -51,8 +50,18 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link to="/welcome" className="text-muted-foreground hover:text-foreground">
+              <Link to="/about" className="text-muted-foreground hover:text-foreground">
+                About us
+              </Link>
+            </li>
+            <li>
+              <Link to="/bookings" className="text-muted-foreground hover:text-foreground">
                 Book a session
+              </Link>
+            </li>
+            <li>
+              <Link to="/reviews" className="text-muted-foreground hover:text-foreground">
+                Reviews
               </Link>
             </li>
             <li>

@@ -19,8 +19,11 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/services/home-cleaning", changefreq: "monthly", priority: "0.9" },
           { path: "/services/factory-office-cleaning", changefreq: "monthly", priority: "0.9" },
           { path: "/services/post-renovation-cleaning", changefreq: "monthly", priority: "0.9" },
-          { path: "/services/move-in-move-out-cleaning", changefreq: "monthly", priority: "0.9" },
+          { path: "/services/move-in-cleaning", changefreq: "monthly", priority: "0.9" },
+          { path: "/services/move-out-cleaning", changefreq: "monthly", priority: "0.9" },
           { path: "/services/commercial-mall-cleaning", changefreq: "monthly", priority: "0.9" },
+          { path: "/about", changefreq: "monthly", priority: "0.7" },
+          { path: "/reviews", changefreq: "monthly", priority: "0.7" },
           { path: "/privacy", changefreq: "yearly", priority: "0.3" },
         ];
 

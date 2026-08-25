@@ -6,43 +6,60 @@ import { StickyMobileCta } from "@/components/site/StickyMobileCta";
 import { Button } from "@/components/ui/button";
 import { BUSINESS, type ServiceContent } from "@/lib/services";
 
-export function ServicePageLayout({ service }: { service: ServiceContent }) {
+export function ServicePageLayout({
+  service,
+  heroImage,
+  heroAlt,
+}: {
+  service: ServiceContent;
+  heroImage: string;
+  heroAlt: string;
+}) {
   return (
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
 
       <section className="bg-gradient-soft">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <nav className="text-xs text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">
-              Home
-            </Link>
-            <span className="px-2">/</span>
-            <span className="text-foreground">{service.navLabel}</span>
-          </nav>
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-primary">
-            {service.heroKicker}
-          </p>
-          <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold text-balance-tight sm:text-5xl">
-            {service.pageTitle}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{service.heroLine}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link to="/welcome">
-                Get 10% off your first session <ArrowRight className="size-4" />
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2">
+          <div>
+            <nav className="text-xs text-muted-foreground">
+              <Link to="/" className="hover:text-foreground">
+                Home
               </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
-                <Phone className="size-4" /> {BUSINESS.phone}
-              </a>
-            </Button>
+              <span className="px-2">/</span>
+              <span className="text-foreground">{service.navLabel}</span>
+            </nav>
+            <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-primary">
+              {service.heroKicker}
+            </p>
+            <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold text-balance-tight sm:text-5xl">
+              {service.pageTitle}
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{service.heroLine}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link to="/bookings">
+                  Get 10% off your first session <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+                <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
+                  <Phone className="size-4" /> {BUSINESS.phone}
+                </a>
+              </Button>
+            </div>
           </div>
+          <img
+            src={heroImage}
+            alt={heroAlt}
+            width={1600}
+            height={1104}
+            className="aspect-4/3 w-full rounded-3xl object-cover shadow-lift"
+          />
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
         <h2 className="font-display text-3xl font-bold sm:text-4xl">
           The problems we actually solve
         </h2>
@@ -92,17 +109,17 @@ export function ServicePageLayout({ service }: { service: ServiceContent }) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
         <div className="overflow-hidden rounded-3xl bg-gradient-deep p-8 text-primary-foreground shadow-lift sm:p-12">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">
             Get 10% off your first {service.navLabel.toLowerCase()} session
           </h2>
           <p className="mt-4 max-w-2xl text-sm/6 text-primary-foreground/90">
-            Fill out a form. Book at least one day ahead to keep the first-timer discount.
+            Book at least one day ahead to keep the first-timer discount.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-              <Link to="/welcome">
+              <Link to="/bookings">
                 Claim my 10% discount <ArrowRight className="size-4" />
               </Link>
             </Button>

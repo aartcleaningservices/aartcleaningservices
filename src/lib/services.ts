@@ -2,14 +2,16 @@ export type ServiceSlug =
   | "home-cleaning"
   | "factory-office-cleaning"
   | "post-renovation-cleaning"
-  | "move-in-move-out-cleaning"
+  | "move-in-cleaning"
+  | "move-out-cleaning"
   | "commercial-mall-cleaning";
 
 export type ServicePath =
   | "/services/home-cleaning"
   | "/services/factory-office-cleaning"
   | "/services/post-renovation-cleaning"
-  | "/services/move-in-move-out-cleaning"
+  | "/services/move-in-cleaning"
+  | "/services/move-out-cleaning"
   | "/services/commercial-mall-cleaning";
 
 export interface ServiceContent {
@@ -117,6 +119,93 @@ export const services: ServiceContent[] = [
     ],
   },
   {
+    slug: "move-in-cleaning",
+    path: "/services/move-in-cleaning",
+    navLabel: "Moving In",
+    cardTitle: "Moving In",
+    cardBlurb:
+      "Empty-unit deep cleans timed to your key handover, so your first night in is in a clean home.",
+    pageTitle: "Move In Cleaning",
+    metaTitle: "Move In Cleaning Services | Aart Cleaning Services",
+    metaDescription:
+      "Deep cleaning for empty units before you move in. Cabinet interiors, bathrooms and floors cleaned before your furniture lands. 10% off your first session.",
+    heroKicker: "For tenants, owners and agents",
+    heroLine: "Move into a clean start, not into someone else's leftovers.",
+    pains: [
+      {
+        pain: "You are cleaning at midnight before the movers arrive.",
+        solution:
+          "We take the empty-unit slot: same-week scheduling in early morning or late evening blocks, so the unit is ready before your delivery date.",
+      },
+      {
+        pain: "The previous tenant's grime is now yours.",
+        solution:
+          "Cabinet interiors, wardrobes, fridge cavities, toilets and floor corners are cleaned before your furniture ever lands.",
+      },
+      {
+        pain: "New unit handovers still carry construction dust.",
+        solution:
+          "We damp-wipe and vacuum top-down instead of dry sweeping, so leftover dust is removed rather than pushed around the unit.",
+      },
+      {
+        pain: "Movers and cleaners keep clashing.",
+        solution:
+          "We coordinate with your moving time so cleaning finishes before the first box arrives, not while the hallway is full.",
+      },
+    ],
+    includes: [
+      "Full empty-unit deep clean, room by room",
+      "Wardrobe, cabinet and drawer interiors wiped",
+      "Fridge, oven and appliance interiors (if left in unit)",
+      "Bathrooms descaled, sanitised and deodorised",
+      "Floors washed and dried, ready for furniture",
+    ],
+  },
+  {
+    slug: "move-out-cleaning",
+    path: "/services/move-out-cleaning",
+    navLabel: "Moving Out",
+    cardTitle: "Moving Out",
+    cardBlurb:
+      "Deposit-friendly move out cleans, photo documented and timed to your inspection date.",
+    pageTitle: "Move Out Cleaning",
+    metaTitle: "Move Out Cleaning Services | Aart Cleaning Services",
+    metaDescription:
+      "Move out cleaning that protects your deposit. Photo-documented, timed to your handover inspection, room by room. 10% off your first session.",
+    heroKicker: "For tenants, owners and agents",
+    heroLine: "Move out with your deposit intact and the inspection behind you.",
+    pains: [
+      {
+        pain: "Landlord disputes over cleanliness.",
+        solution:
+          "Before-and-after photos of every room are sent to you the same day, evidence you can forward straight to the agent or owner.",
+      },
+      {
+        pain: "The inspection is tomorrow and the unit is still full.",
+        solution:
+          "We schedule the moment the last box leaves and can assign more staffs so the whole unit is finished in one session.",
+      },
+      {
+        pain: "Years of grease and limescale will not budge.",
+        solution:
+          "Kitchen hoods, hobs, sinks and bathroom fittings are degreased and descaled with the right products for each surface.",
+      },
+      {
+        pain: "You are already paying movers, agents and a new deposit.",
+        solution:
+          "Clear hourly pricing at RM 25 per hour with no surprise add-ons, so you know the cost before we start.",
+      },
+    ],
+    includes: [
+      "Full empty-unit deep clean, room by room",
+      "Wardrobe, cabinet and drawer interiors wiped",
+      "Kitchen degrease: hob, hood, sink and cabinet fronts",
+      "Bathrooms descaled, sanitised and deodorised",
+      "Before-and-after photo report for your inspection",
+    ],
+  },
+  
+  {
     slug: "post-renovation-cleaning",
     path: "/services/post-renovation-cleaning",
     navLabel: "Post-Renovation",
@@ -158,49 +247,6 @@ export const services: ServiceContent[] = [
       "Paint, adhesive and sticker residue removal",
       "Window glass, tracks, grilles and frames detailed",
       "Cabinet interiors wiped and construction debris cleared",
-    ],
-  },
-  {
-    slug: "move-in-move-out-cleaning",
-    path: "/services/move-in-move-out-cleaning",
-    navLabel: "Move In / Out",
-    cardTitle: "Moving In or Moving Out",
-    cardBlurb:
-      "Empty-unit deep cleans timed perfectly to your key handover, deposit inspection, or first night in",
-    pageTitle: "Move In & Move Out Cleaning",
-    metaTitle: "Move In & Move Out Cleaning | Aart Cleaning Services",
-    metaDescription:
-      "Deep cleaning for empty units before you move in or after you move out. Deposit-friendly, photo-documented, timed to your handover. 10% off first session.",
-    heroKicker: "For tenants, owners and agents",
-    heroLine: "Move into a clean start or move out with your deposit intact.",
-    pains: [
-      {
-        pain: "You are cleaning at midnight before handover.",
-        solution:
-          "We take the empty-unit slot: same-week scheduling, early morning or late evening blocks, so the unit is done before inspection.",
-      },
-      {
-        pain: "The previous tenant's grime is now yours.",
-        solution:
-          "Cabinet interiors, wardrobes, fridge cavities, toilets and floor corners are cleaned before your furniture ever lands.",
-      },
-      {
-        pain: "Landlord disputes over cleanliness.",
-        solution:
-          "Before-and-after photos of every room are sent to you the same day - evidence you can forward straight to the agent.",
-      },
-      {
-        pain: "Movers and cleaners keep clashing.",
-        solution:
-          "We coordinate with your moving time so cleaning starts the moment the last box leaves, not while it is still in the hallway.",
-      },
-    ],
-    includes: [
-      "Full empty-unit deep clean, room by room",
-      "Wardrobe, cabinet and drawer interiors wiped",
-      "Fridge, oven and appliance interiors (if left in unit)",
-      "Bathrooms descaled, sanitised and deodorised",
-      "Before-and-after photo report",
     ],
   },
   {
@@ -256,7 +302,7 @@ export const BUSINESS = {
   name: "Aart Cleaning Services",
   phone: "+60 13 551 9772",
   phoneHref:
-    "https://api.whatsapp.com/send?phone=60135519772&text=I%20want%20to%20book%20a%20cleaning%20service%20and%20claim%20my%2010%25%20first-time%20discount.",
+    "https://wa.me/60135519772?text=I%20am%20interested%20for%20a%20cleaning%20service%20for%20my%20place",
   waHref: "https://wa.me/60135519772",
   email: "nora@aartcleaning.my",
   area: "Klang, Shah Alam, Subang, and Kota Kemuning",

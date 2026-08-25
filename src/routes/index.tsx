@@ -1,6 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgePercent, Clock, Phone, ShieldCheck, Star, Users } from "lucide-react";
-import heroImage from "@/assets/hero-cleaning.png";
+import {
+  Phone,
+  ArrowRight,
+  BadgePercent,
+  Clock,
+  Factory,
+  Home,
+  type LucideIcon,
+  PackageOpen,
+  PaintRoller,
+  PartyPopper,
+  ShieldCheck,
+  Star,
+  Store,
+  Truck,
+  Users,
+} from "lucide-react";
+import heroImage from "@/assets/hero-cleaning.webp";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
@@ -8,7 +24,10 @@ import { FaqSection, faqs } from "@/components/site/FaqSection";
 import { Button } from "@/components/ui/button";
 import { BUSINESS, services } from "@/lib/services";
 
-const TITLE = "Aart Cleaning Services | Home, Office & Post-Renovation Cleaning";
+const EVENTS_HREF =
+  "https://wa.me/60135519772?text=Hi%20Aart%20Cleaning%2C%20I%20need%20cleaning%20for%20an%20event";
+
+const TITLE = "Aart Cleaning Services | Home, Rentals & Office Cleaning";
 const DESCRIPTION =
   "Local cleaning services in Klang, Shah Alam, Subang, and Kota Kemuning for homes, rentals, offices, factories, post-renovation units and malls. From RM 25/hour. 10% off your first session.";
 
@@ -90,22 +109,34 @@ export const Route = createFileRoute("/")({
 });
 
 const trust = [
-  { 
-    icon: ShieldCheck, 
-    title: "Attention to detail", 
-    body: " High-quality staffs leave no corner untouched with attention to details" 
-  },
-  { 
-    icon: Clock, 
-    title: "7 AM to  6 PM", 
-    body: "Book your cleaning any day of the week between 7 AM and 6 PM" 
-  },
-  { 
-    icon: Users, 
-    title: "Faster with a Team", 
-    body: "2-hour per session minimum for\u00A0\n2 or more cleaners or more cleaners" 
-  },
+  { icon: ShieldCheck, label: "Attention to detail, no corner skipped" },
+  { icon: Clock, label: "7 AM to 6 PM, any day of the week" },
+  { icon: Users, label: "2-hour minimum with 2 or more cleaners" },
 ];
+
+const serviceTheme: Record<
+  string,
+  { tint: string; cta: string; icon: LucideIcon }
+> = {
+  "home-cleaning": { tint: "svc-home", cta: "Clean my home", icon: Home },
+  "factory-office-cleaning": {
+    tint: "svc-office",
+    cta: "Clean my workplace",
+    icon: Factory,
+  },
+  "move-in-cleaning": { tint: "svc-move", cta: "Prepare my move in", icon: PackageOpen },
+  "move-out-cleaning": { tint: "svc-moveout", cta: "Prepare my move out", icon: Truck },
+  "post-renovation-cleaning": {
+    tint: "svc-renovation",
+    cta: "Clean after renovation",
+    icon: PaintRoller,
+  },
+  "commercial-mall-cleaning": {
+    tint: "svc-mall",
+    cta: "Clean my retail space",
+    icon: Store,
+  },
+};
 
 function LandingPage() {
   return (
@@ -113,25 +144,25 @@ function LandingPage() {
       <SiteHeader />
 
       <section className="relative overflow-hidden bg-gradient-soft">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-foreground">
+            <h3 className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-foreground">
               <BadgePercent className="size-3.5" /> 10% OFF YOUR FIRST SESSION
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-bold text-balance-tight sm:text-6xl">
-              Cleaning you can&apos;t stop thinking about.
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-muted-foreground">
+            </h3>
+            <h2 className="mt-5 font-display text-4xl font-bold text-balance-tight sm:text-6xl">
+              Reliable cleaning for the places that matter.
+            </h2>
+            <h1 className="mt-5 max-w-xl text-lg text-muted-foreground">
               We clean homes, rentals, offices, factories, freshly renovated units and retail spaces across Klang, Shah Alam, Subang, and Kota Kemuning for RM 25 per hour.
-            </p>
+            </h1>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/welcome">
+                <Link to="/bookings">
                   Book & claim 10% off <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
+                <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
                   <Phone className="size-4" /> {BUSINESS.phone}
                 </a>
               </Button>
@@ -162,79 +193,107 @@ function LandingPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="grid gap-5 sm:grid-cols-3">
+      <section className="mx-auto max-w-6xl px-4 pt-10 sm:px-6">
+        <ul className="flex flex-col divide-y divide-border rounded-2xl border border-border bg-card px-5 shadow-soft sm:flex-row sm:divide-x sm:divide-y-0">
           {trust.map((t) => (
-            <div key={t.title} className="rounded-3xl border border-border bg-card p-6 shadow-soft">
-              <t.icon className="size-6 text-primary" />
-              <p className="mt-4 font-display font-semibold">{t.title}</p>
-              <div className="mt-1.5 text-sm text-muted-foreground whitespace-pre-line">{t.body}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="services" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-10 sm:px-6">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Our services</p>
-        <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-          Pick the space you need cleaned
-        </h2>
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <article
-              key={s.slug}
-              className="flex flex-col rounded-3xl border border-border bg-card p-6 shadow-soft transition-shadow hover:shadow-lift"
+            <li
+              key={t.label}
+              className="flex flex-1 items-center gap-3 py-3.5 text-sm font-medium sm:px-5 sm:first:pl-0 sm:last:pr-0"
             >
-              <h3 className="font-display text-lg font-bold">{s.cardTitle}</h3>
-              <p className="mt-3 flex-1 text-sm/6 text-muted-foreground">{s.cardBlurb}</p>
-              <Button asChild variant="secondary" className="mt-6 w-full justify-between">
-                <Link to={s.path}>
-                  {s.navLabel === "Homes & Rentals"
-                    ? "Clean my home"
-                    : s.navLabel === "Factory & Office"
-                      ? "Clean my workplace"
-                      : s.navLabel === "Post-Renovation"
-                        ? "Clear the reno dust"
-                        : s.navLabel === "Move In / Out"
-                          ? "Prep my move"
-                          : "Clean my retail space"}
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-            </article>
+              <t.icon className="size-4 shrink-0 text-primary" />
+              <span className="text-muted-foreground">{t.label}</span>
+            </li>
           ))}
+        </ul>
+      </section>
+
+      <section id="services" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-12 sm:px-6 sm:py-14">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Our cleaning services</p>
+        <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
+          A cleaner space, without the hassle
+        </h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((s) => {
+            const theme = serviceTheme[s.slug];
+            const Icon = theme?.icon ?? Home;
+            return (
+              <Link
+                key={s.slug}
+                to={s.path}
+                className={`service-card group flex flex-col rounded-3xl border border-border bg-card p-6 ${theme?.tint ?? "svc-home"}`}
+              >
+                <span className="service-icon grid size-11 shrink-0 place-items-center rounded-2xl">
+                  <Icon className="size-5.5" strokeWidth={1.75} />
+                </span>
+                <h3 className="mt-4 font-display text-lg font-bold">{s.cardTitle}</h3>
+                <p className="mt-2 flex-1 text-sm/6 text-muted-foreground">{s.cardBlurb}</p>
+                <span className="service-cta mt-5 flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold">
+                  {theme?.cta ?? "View service"}
+                  <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
+                </span>
+              </Link>
+            );
+          })}
+
+          <a
+            href={EVENTS_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="service-card svc-events group flex flex-col rounded-3xl border border-border bg-card p-6 sm:col-span-2 lg:col-span-3"
+          >
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-4">
+                <span className="service-icon grid size-11 shrink-0 place-items-center rounded-2xl">
+                  <PartyPopper className="size-5.5" strokeWidth={1.75} />
+                </span>
+                <div>
+                  <h3 className="font-display text-lg font-bold">Events and Functions</h3>
+                  <p className="mt-2 max-w-2xl text-sm/6 text-muted-foreground">
+                    Weddings, open houses, corporate functions and pop-up booths. Pre-event
+                    preparation, on-site cleaning during the event, and a full teardown clean after
+                    the last guest leaves.
+                  </p>
+                </div>
+              </div>
+              <span className="service-cta flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-semibold sm:w-auto sm:shrink-0">
+                Talk to us
+                <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </span>
+            </div>
+          </a>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
-        <div className="overflow-hidden rounded-3xl bg-gradient-deep p-8 text-primary-foreground shadow-lift sm:p-12">
+
+      <section className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
+        <div className="overflow-hidden rounded-3xl bg-gradient-deep p-6 text-primary-foreground shadow-lift sm:p-10">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-foreground/80">
             10% off your first session
           </p>
           <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
-            Fill out a form. Book at least one day ahead to keep the first-timer discount.
+            Book at least one day ahead to keep the first-timer discount.
           </h2>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-              <Link to="/welcome">
+              <Link to="/bookings">
                 Claim my 10% discount <ArrowRight className="size-4" />
               </Link>
             </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="w-full border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
-            >
-              <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
-                <Phone className="size-4" /> {BUSINESS.phone}
-              </a>
-            </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="w-full border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
+              >
+                <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
+                  <Phone className="size-4" /> {BUSINESS.phone}
+                </a>
+              </Button>
           </div>
         </div>
       </section>
 
-      <div className="py-16 sm:py-20">
+      <div className="py-12 sm:py-14">
         <FaqSection />
       </div>
 

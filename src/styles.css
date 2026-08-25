@@ -158,3 +158,90 @@
   text-wrap: balance;
 }
 
+
+/* Per-service accent tints used by the home page service cards. */
+:root {
+  /* Home (Teal - Fresh & Clean) */
+  --service-home: oklch(0.93 0.06 195);
+  --service-home-ink: oklch(0.35 0.08 195);
+  
+  /* Office (Blue - Professional & Reliable) */
+  --service-office: oklch(0.93 0.06 255);
+  --service-office-ink: oklch(0.35 0.08 255);
+  
+  /* Move In (Mint Green - New Beginnings) */
+  --service-move: oklch(0.93 0.07 145);
+  --service-move-ink: oklch(0.38 0.09 145);
+  
+  /* Move Out (Amber/Yellow - Alert & Action) */
+  --service-moveout: oklch(0.94 0.08 85);
+  --service-moveout-ink: oklch(0.40 0.09 75);
+  
+  /* Renovation (Slate/Purple - Industrial & Dust) */
+  --service-renovation: oklch(0.93 0.05 285);
+  --service-renovation-ink: oklch(0.35 0.08 285);
+  
+  /* Mall (Peach/Orange - Warm & Retail) */
+  --service-mall: oklch(0.93 0.06 35);
+  --service-mall-ink: oklch(0.38 0.09 35);
+  
+  /* Events (Pink/Magenta - Celebration & Fun) */
+  --service-events: oklch(0.93 0.07 340);
+  --service-events-ink: oklch(0.35 0.10 340);
+}
+
+@utility service-card {
+  --svc: var(--service-home);
+  --svc-ink: var(--service-home-ink);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.service-card:hover {
+  border-color: color-mix(in oklab, var(--svc) 80%, var(--color-foreground) 20%);
+  transform: translateY(-3px);
+  box-shadow:
+    0 1px 2px oklch(0.36 0.07 200 / 0.06),
+    0 14px 32px -16px color-mix(in oklab, var(--svc) 70%, transparent);
+}
+
+@utility service-cta {
+  background-color: var(--svc);
+  color: var(--svc-ink);
+}
+
+@utility service-icon {
+  background-color: color-mix(in oklab, var(--svc) 55%, white 45%);
+  color: var(--svc-ink);
+}
+
+@utility svc-home {
+  --svc: var(--service-home);
+  --svc-ink: var(--service-home-ink);
+}
+@utility svc-office {
+  --svc: var(--service-office);
+  --svc-ink: var(--service-office-ink);
+}
+@utility svc-renovation {
+  --svc: var(--service-renovation);
+  --svc-ink: var(--service-renovation-ink);
+}
+@utility svc-move {
+  --svc: var(--service-move);
+  --svc-ink: var(--service-move-ink);
+}
+@utility svc-moveout {
+  --svc: var(--service-moveout);
+  --svc-ink: var(--service-moveout-ink);
+}
+@utility svc-mall {
+  --svc: var(--service-mall);
+  --svc-ink: var(--service-mall-ink);
+}
+@utility svc-events {
+  --svc: var(--service-events);
+  --svc-ink: var(--service-events-ink);
+}

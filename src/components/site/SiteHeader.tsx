@@ -24,14 +24,14 @@ export function SiteHeader() {
 
         <div className="ml-auto flex items-center justify-end gap-2">
           <a
-            href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer"
+            href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded-full border border-border px-3 py-2 text-sm font-semibold md:flex"
           >
             <Phone className="size-4 text-primary" />
             {BUSINESS.phone}
           </a>
           <Button asChild size="sm" className="hidden md:inline-flex">
-            <Link to="/welcome">Book & save 10%</Link>
+            <Link to="/bookings">Book & save 10%</Link>
           </Button>
           <button
             type="button"
@@ -57,7 +57,21 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link
-            to="/welcome"
+            to="/about"
+            onClick={() => setOpen(false)}
+            className="block rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary"
+          >
+            About us
+          </Link>
+          <Link
+            to="/reviews"
+            onClick={() => setOpen(false)}
+            className="block rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary"
+          >
+            Reviews
+          </Link>
+          <Link
+            to="/bookings"
             onClick={() => setOpen(false)}
             className="mt-2 block rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground"
           >

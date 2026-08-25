@@ -4,6 +4,8 @@ import {
   BadgePercent,
   Calendar,
   CheckCircle2,
+  ChevronDown,
+  ChevronLeft,
   Clock,
   Loader2,
   LocateFixed,
@@ -15,17 +17,19 @@ import {
   UserRound,
 } from "lucide-react";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { LeadForm, type LeadValues } from "@/components/site/LeadForm";
 import { Button } from "@/components/ui/button";
+import { Calendar as CalendarPicker } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { BUSINESS } from "@/lib/services";
 import { cn } from "@/lib/utils";
 import { postStepData } from "@/lib/submitLead";
+import { COUNTRY_CODES, matchDial } from "@/lib/countryCodes";
 
-const TITLE = "Welcome - Build Your Booking | Aart Cleaning Services";
+const TITLE = "Book Your Clean | Aart Cleaning Services";
 const DESCRIPTION =
   "Set your location, date, time and staff count to see your cleaning rate instantly. First-time customers get 10% off.";
 
-export const Route = createFileRoute("/welcome")({
+export const Route = createFileRoute("/bookings")({
   head: () => ({
     meta: [
       { title: TITLE },
@@ -33,29 +37,355 @@ export const Route = createFileRoute("/welcome")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/welcome" },
+      { property: "og:url", content: "/bookings" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "/welcome" }],
+    links: [{ rel: "canonical", href: "/bookings" }],
   }),
   component: WelcomePage,
 });
 
-type AddressKey = "address" | "city" | "postcode";
+type AddressKey = "address" | "postcode" | "city" | "state";
+
+export interface LeadValues {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+// First-2-digit postcode prefix -> state / federal territory, per
+// https://en.wikipedia.org/wiki/Postal_codes_in_Malaysia
+// A few prefixes are genuinely shared by disjoint areas of one state
+// (e.g. 39/49/69 are outlying Pahang districts sitting inside Selangor's
+// numeric neighbourhood) - this table reflects the primary/majority
+// assignment for each prefix. The dropdown stays editable so an address
+// on one of these edge cases can always be corrected by hand.
+const POSTCODE_PREFIX_STATE: Record<string, string> = {
+  "01": "Perlis",
+  "02": "Perlis",
+  "05": "Kedah",
+  "06": "Kedah",
+  "07": "Kedah",
+  "08": "Kedah",
+  "09": "Kedah",
+  "10": "Penang",
+  "11": "Penang",
+  "12": "Penang",
+  "13": "Penang",
+  "14": "Penang",
+  "15": "Kelantan",
+  "16": "Kelantan",
+  "17": "Kelantan",
+  "18": "Kelantan",
+  "20": "Terengganu",
+  "21": "Terengganu",
+  "22": "Terengganu",
+  "23": "Terengganu",
+  "24": "Terengganu",
+  "25": "Pahang",
+  "26": "Pahang",
+  "27": "Pahang",
+  "28": "Pahang",
+  "30": "Perak",
+  "31": "Perak",
+  "32": "Perak",
+  "33": "Perak",
+  "34": "Perak",
+  "35": "Perak",
+  "36": "Perak",
+  "39": "Pahang", // Cameron Highlands
+  "40": "Selangor",
+  "41": "Selangor",
+  "42": "Selangor",
+  "43": "Selangor",
+  "44": "Selangor",
+  "45": "Selangor",
+  "46": "Selangor",
+  "47": "Selangor",
+  "48": "Selangor",
+  "49": "Pahang", // Fraser's Hill
+  "50": "Kuala Lumpur",
+  "51": "Kuala Lumpur",
+  "52": "Kuala Lumpur",
+  "53": "Kuala Lumpur",
+  "54": "Kuala Lumpur",
+  "55": "Kuala Lumpur",
+  "56": "Kuala Lumpur",
+  "57": "Kuala Lumpur",
+  "58": "Kuala Lumpur",
+  "59": "Kuala Lumpur",
+  "60": "Kuala Lumpur",
+  "62": "Putrajaya",
+  "63": "Selangor",
+  "64": "Selangor",
+  "65": "Selangor",
+  "66": "Selangor",
+  "67": "Selangor",
+  "68": "Selangor", // 68100 itself is a Kuala Lumpur exception within this block
+  "69": "Pahang", // Genting Highlands
+  "70": "Negeri Sembilan",
+  "71": "Negeri Sembilan",
+  "72": "Negeri Sembilan",
+  "73": "Negeri Sembilan",
+  "75": "Malacca",
+  "76": "Malacca",
+  "77": "Malacca",
+  "78": "Malacca",
+  "79": "Johor",
+  "80": "Johor",
+  "81": "Johor",
+  "82": "Johor",
+  "83": "Johor",
+  "84": "Johor",
+  "85": "Johor",
+  "86": "Johor",
+  "87": "Labuan",
+  "88": "Sabah",
+  "89": "Sabah",
+  "90": "Sabah",
+  "91": "Sabah",
+  "93": "Sarawak",
+  "94": "Sarawak",
+  "95": "Sarawak",
+  "96": "Sarawak",
+  "97": "Sarawak",
+  "98": "Sarawak",
+};
+
+const MALAYSIA_STATES = Array.from(new Set(Object.values(POSTCODE_PREFIX_STATE))).sort();
+
+const getStateFromPostcode = (postcode: string): string | null => {
+  const prefix = postcode.slice(0, 2);
+  return /^\d{2}$/.test(prefix) ? POSTCODE_PREFIX_STATE[prefix] ?? null : null;
+};
 type Frequency = "one-time" | "monthly" | "weekly";
 
 const DURATIONS = [2, 3, 4, 5, 6, 7, 8];
 const HOUR_BLOCKS = Array.from({ length: 12 }, (_, i) => 7 + i); // 7:00 - 18:00
 const LAST_END = 18; // sessions must end by 18:00
+const STEP_LABELS: Record<number, string> = {
+  1: "Your details",
+  2: "Location",
+  3: "Date & times",
+};
 
 
 const formatHour = (h: number) => `${String(h).padStart(2, "0")}:00`;
 const rm = (n: number) => `RM ${n.toFixed(2)}`;
-const todayISO = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+// Local-time (not UTC) date <-> "yyyy-mm-dd" helpers, so a date picked in the
+// user's own timezone always round-trips to the same calendar day.
+const toISODate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const parseISODate = (iso: string): Date | undefined => {
+  if (!iso) return undefined;
+  const [y, m, d] = iso.split("-").map(Number);
+  if (y === undefined || m === undefined || d === undefined) return undefined;
+  return new Date(y, m - 1, d);
 };
+const formatDisplayDate = (iso: string) => {
+  const d = parseISODate(iso);
+  return d
+    ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+    : "";
+};
+const todayISO = () => toISODate(new Date());
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+
+const splitPhone = (full: string) => {
+  const value = full.trim().replace(/\s+/g, " ");
+  const match = matchDial(value);
+  if (match) return { iso: match.iso, national: value.slice(match.dial.length).trim() };
+  return { iso: "MY", national: value };
+};
+
+type LeadFieldKey = "name" | "email" | "phone";
+
+interface LeadFormProps {
+  onComplete: (values: LeadValues) => void;
+  initialValues?: LeadValues | null;
+}
+
+function LeadForm({ onComplete, initialValues }: LeadFormProps) {
+  const [values, setValues] = useState<Record<LeadFieldKey, string>>({
+    name: initialValues?.name ?? "",
+    email: initialValues?.email ?? "",
+    phone: splitPhone(initialValues?.phone ?? "").national,
+  });
+  const [countryIso, setCountryIso] = useState(splitPhone(initialValues?.phone ?? "").iso);
+  const country =
+    COUNTRY_CODES.find((c) => c.iso === countryIso) ?? COUNTRY_CODES[0]!;
+  const [errors, setErrors] = useState<Partial<Record<LeadFieldKey, string>>>({});
+
+  const setValue = (key: LeadFieldKey, value: string) => {
+    setValues((v) => ({ ...v, [key]: value }));
+    if (errors[key])
+      setErrors((e) => {
+        const next = { ...e };
+        delete next[key];
+        return next;
+      });
+  };
+
+  const validateEmailOnBlur = () => {
+    const email = values.email.trim();
+    if (!email) return;
+    setErrors((e) => {
+      const next = { ...e };
+      if (EMAIL_REGEX.test(email)) delete next.email;
+      else next.email = "Enter a valid email like name@example.com";
+      return next;
+    });
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const next: Partial<Record<LeadFieldKey, string>> = {};
+    if (!values.name.trim()) next.name = "Please tell us your name";
+    if (!values.email.trim()) next.email = "Please enter your email address";
+    else if (!EMAIL_REGEX.test(values.email.trim()))
+      next.email = "Enter a valid email like name@example.com";
+    if (!values.phone.trim()) next.phone = "Please enter your phone number";
+
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
+
+    const clean = {
+      name: values.name.trim(),
+      email: values.email.trim(),
+      phone: `${country.dial} ${values.phone.trim()}`.trim(),
+    };
+    try {
+      sessionStorage.setItem("aart_lead", JSON.stringify(clean));
+    } catch {
+      /* storage unavailable - continue anyway */
+    }
+
+    postStepData({ step: "lead", ...clean });
+    onComplete(clean);
+  };
+
+  const fieldClass = (key: LeadFieldKey) =>
+    cn(
+      "h-12 w-full rounded-xl border bg-card px-4 text-base outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-ring/25",
+      errors[key]
+        ? "border-destructive bg-destructive/5 ring-2 ring-destructive/25"
+        : "border-input",
+    );
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
+    >
+      <span className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-foreground">
+        <BadgePercent className="size-3.5" /> 10% off first session
+      </span>
+      <h2 className="mt-5 font-display text-xl font-bold">Let&apos;s get you started</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Three things, then we&apos;ll set up your booking.
+      </p>
+
+      <div className="mt-6 space-y-5">
+        <div>
+          <label htmlFor="lead-name" className="text-sm font-semibold">
+            Name
+          </label>
+          <input
+            id="lead-name"
+            name="name"
+            autoComplete="name"
+            value={values.name}
+            onChange={(e) => setValue("name", e.target.value)}
+            placeholder="Your Name"
+            aria-invalid={Boolean(errors.name)}
+            className={cn(fieldClass("name"), "mt-2")}
+          />
+          {errors.name && (
+            <p className="mt-1.5 text-xs font-medium text-destructive">{errors.name}</p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="lead-email" className="text-sm font-semibold">
+            Email address
+          </label>
+          <input
+            id="lead-email"
+            name="email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={values.email}
+            onChange={(e) => setValue("email", e.target.value)}
+            onBlur={validateEmailOnBlur}
+            placeholder="you@example.com"
+            aria-invalid={Boolean(errors.email)}
+            className={cn(fieldClass("email"), "mt-2")}
+          />
+          {errors.email && (
+            <p className="mt-1.5 text-xs font-medium text-destructive">{errors.email}</p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="lead-phone" className="text-sm font-semibold">
+            Phone number
+          </label>
+          <div className="mt-2 flex items-stretch gap-2">
+            <div className="relative shrink-0">
+              <select
+                aria-label="Country calling code"
+                value={countryIso}
+                onChange={(e) => setCountryIso(e.target.value)}
+                className="h-12 w-[7.5rem] appearance-none rounded-xl border border-input bg-card pl-3 pr-8 text-base font-semibold outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-ring/25"
+              >
+                {COUNTRY_CODES.map((c) => (
+                  <option key={c.iso} value={c.iso}>
+                    {c.flag} {c.dial}
+                  </option>
+                ))}
+              </select>
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-px left-px right-7 flex items-center gap-1.5 rounded-l-xl bg-card pl-3 text-base font-semibold"
+              >
+                <span className="text-lg leading-none">{country.flag}</span>
+                {country.dial}
+              </span>
+              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            </div>
+            <input
+              id="lead-phone"
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              value={values.phone}
+              onChange={(e) => setValue("phone", e.target.value)}
+              placeholder="12 345 6789"
+              aria-invalid={Boolean(errors.phone)}
+              className={cn(fieldClass("phone"), "min-w-0 flex-1")}
+            />
+          </div>
+          {errors.phone && (
+            <p className="mt-1.5 text-xs font-medium text-destructive">{errors.phone}</p>
+          )}
+        </div>
+      </div>
+
+      <Button type="submit" size="lg" className="mt-7 w-full">
+        Continue to location
+      </Button>
+      <p className="mt-3 text-center text-xs text-muted-foreground">
+        We only use these details to arrange your cleaning.
+      </p>
+    </form>
+  );
+}
 
 function WelcomePage() {
   const navigate = useNavigate();
@@ -66,8 +396,9 @@ function WelcomePage() {
   // Step 1
   const [address, setAddress] = useState<Record<AddressKey, string>>({
     address: "",
-    city: "",
     postcode: "",
+    city: "",
+    state: "",
   });
   const [addressErrors, setAddressErrors] = useState<AddressKey[]>([]);
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -75,6 +406,7 @@ function WelcomePage() {
 
   // Step 2
   const [date, setDate] = useState("");
+  const [datePopoverOpen, setDatePopoverOpen] = useState(false);
   const [startHour, setStartHour] = useState<number | null>(null);
   const [duration, setDuration] = useState(4);
   const [frequency] = useState<Frequency>("one-time");
@@ -209,33 +541,65 @@ function WelcomePage() {
           clean
         </h1>
         <p className="mt-3 text-muted-foreground">
-          Three quick steps. Your rate updates as you choose.
+          Three quick steps. Book at least one day ahead for your first session 10% off.
         </p>
 
-        <div className="mt-8 flex items-center gap-3">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="flex flex-1 items-center gap-3">
-              <span
-                className={cn(
-                  "grid size-9 shrink-0 place-items-center rounded-full text-sm font-bold",
-                  step >= n
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground",
-                )}
-              >
-                {n}
-              </span>
-              <span className="hidden text-sm font-semibold sm:inline">
-                {n === 1 ? "Your details" : n === 2 ? "Location" : "Time, dates & staff"}
-              </span>
-              {n < 3 && <span className="h-px flex-1 bg-border" />}
-            </div>
-          ))}
-        </div>
+        <button
+          type="button"
+          onClick={() => (step > 1 ? setStep((s) => s - 1) : navigate({ to: "/" }))}
+          className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ChevronLeft className="size-4" />
+          Back
+        </button>
+
+        <nav aria-label="Booking steps" className="mt-4 flex items-center gap-3">
+          {[1, 2, 3].map((n) => {
+            const label = STEP_LABELS[n];
+            const canGo = n < step;
+            return (
+              <div key={n} className="flex flex-1 items-center gap-3">
+                <button
+                  type="button"
+                  disabled={!canGo}
+                  aria-current={step === n ? "step" : undefined}
+                  onClick={() => canGo && setStep(n)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-full text-left transition-opacity",
+                    canGo ? "cursor-pointer hover:opacity-80" : "cursor-default",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "grid size-9 shrink-0 place-items-center rounded-full text-sm font-bold",
+                      step >= n
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-secondary-foreground",
+                    )}
+                  >
+                    {n}
+                  </span>
+                  <span
+                    className={cn(
+                      "hidden text-sm font-semibold sm:inline",
+                      canGo && "underline decoration-dotted underline-offset-4",
+                      step < n && "text-muted-foreground",
+                    )}
+                  >
+                    {label}
+                  </span>
+                </button>
+                {n < 3 && <span className="h-px flex-1 bg-border" />}
+              </div>
+            );
+          })}
+        </nav>
+        <p className="mt-3 text-sm font-semibold sm:hidden">{STEP_LABELS[step]}</p>
 
         {step === 1 && (
           <section className="mt-8">
             <LeadForm
+              initialValues={lead}
               onComplete={(values) => {
                 setLead(values);
                 setStep(2);
@@ -243,6 +607,7 @@ function WelcomePage() {
             />
           </section>
         )}
+
 
         {step === 2 && (
           <section className="mt-8 rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8">
@@ -297,6 +662,26 @@ function WelcomePage() {
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
+                  <label htmlFor="postcode" className="text-sm font-semibold">
+                    Postcode
+                  </label>
+                  <input
+                    id="postcode"
+                    inputMode="numeric"
+                    value={address.postcode}
+                    onChange={(e) => {
+                      const postcode = e.target.value;
+                      setAddress((a) => {
+                        const detected = getStateFromPostcode(postcode);
+                        return { ...a, postcode, state: detected ?? a.state };
+                      });
+                    }}
+                    placeholder="58200"
+                    aria-invalid={addressErrors.includes("postcode")}
+                    className={inputClass(addressErrors.includes("postcode"))}
+                  />
+                </div>
+                <div>
                   <label htmlFor="city" className="text-sm font-semibold">
                     City
                   </label>
@@ -309,20 +694,25 @@ function WelcomePage() {
                     className={inputClass(addressErrors.includes("city"))}
                   />
                 </div>
-                <div>
-                  <label htmlFor="postcode" className="text-sm font-semibold">
-                    Postcode
-                  </label>
-                  <input
-                    id="postcode"
-                    inputMode="numeric"
-                    value={address.postcode}
-                    onChange={(e) => setAddress((a) => ({ ...a, postcode: e.target.value }))}
-                    placeholder="58200"
-                    aria-invalid={addressErrors.includes("postcode")}
-                    className={inputClass(addressErrors.includes("postcode"))}
-                  />
-                </div>
+              </div>
+              <div>
+                <label htmlFor="state" className="text-sm font-semibold">
+                  State
+                </label>
+                <select
+                  id="state"
+                  value={address.state}
+                  onChange={(e) => setAddress((a) => ({ ...a, state: e.target.value }))}
+                  aria-invalid={addressErrors.includes("state")}
+                  className={inputClass(addressErrors.includes("state"))}
+                >
+                  <option value="" disabled></option>
+                  {MALAYSIA_STATES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -382,17 +772,34 @@ function WelcomePage() {
               <h2 className="flex items-center gap-2 font-display text-xl font-bold">
                 <Calendar className="size-5 text-primary" /> Pick your date
               </h2>
-              <input
-                type="date"
-                value={date}
-                min={todayISO()}
-                onChange={(e) => {
-                  setDate(e.target.value);
-                  setStep2Errors((x) => x.filter((v) => v !== "date"));
-                }}
-                aria-invalid={step2Errors.includes("date")}
-                className={cn(inputClass(step2Errors.includes("date")), "max-w-xs")}
-              />
+              <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    aria-invalid={step2Errors.includes("date")}
+                    className={cn(
+                      inputClass(step2Errors.includes("date")),
+                      "max-w-xs flex items-center justify-between text-left font-normal",
+                    )}
+                  >
+                    {date ? formatDisplayDate(date) : "Select a date"}
+                    <Calendar className="size-4 shrink-0 text-muted-foreground" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <CalendarPicker
+                    mode="single"
+                    selected={parseISODate(date)}
+                    onSelect={(selectedDate) => {
+                      setDate(selectedDate ? toISODate(selectedDate) : "");
+                      setStep2Errors((x) => x.filter((v) => v !== "date"));
+                      setDatePopoverOpen(false);
+                    }}
+                    disabled={{ before: new Date() }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               {isSameDay && (
                 <p className="mt-3 flex items-start gap-2 rounded-xl bg-accent/25 p-3 text-xs font-medium text-accent-foreground">
                   <TriangleAlert className="mt-0.5 size-4 shrink-0" />
@@ -494,25 +901,27 @@ function WelcomePage() {
               ) : (
                 <>
                   <dl className="mt-5 space-y-2.5 text-sm">
-                    <div className="flex justify-between">
-                      <dt className="text-muted-foreground">
+                    <div className="flex justify-between gap-3">
+                      <dt className="min-w-0 text-muted-foreground">
                         Base rate {rm(BUSINESS.baseRate)}/hour × {duration} hours ×{" "}
                         {cleaners} cleaner{cleaners > 1 ? "s" : ""}
                       </dt>
-                      <dd className="font-semibold">{rm(quote.subtotal)}</dd>
+                      <dd className="shrink-0 whitespace-nowrap font-semibold">
+                        {rm(quote.subtotal)}
+                      </dd>
                     </div>
-                    <div className="flex justify-between">
-                      <dt className="text-muted-foreground">
+                    <div className="flex justify-between gap-3">
+                      <dt className="min-w-0 text-muted-foreground">
                         First-session discount ({quote.firstTimePct}%)
                         {isSameDay ? " - not eligible on same-day bookings" : ""}
                       </dt>
-                      <dd className="font-semibold text-primary">
+                      <dd className="shrink-0 whitespace-nowrap font-semibold text-primary">
                         −{rm(quote.firstTimeOff)}
                       </dd>
                     </div>
 
                   </dl>
-                  <div className="mt-5 flex items-end justify-between border-t border-border pt-5">
+                  <div className="mt-5 flex flex-col items-start gap-2 border-t border-border pt-5 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                         Final rate
@@ -522,16 +931,19 @@ function WelcomePage() {
                         {duration}h · {cleaners} cleaner{cleaners > 1 ? "s" : ""}
                       </p>
                     </div>
-                    <p className="font-display text-3xl font-bold">{rm(quote.total)}</p>
+                    <p className="whitespace-nowrap font-display text-3xl font-bold">
+                      {rm(quote.total)}
+                    </p>
                   </div>
                 </>
               )}
 
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Button variant="outline" size="lg" onClick={() => setStep(2)}>
-                  Back to location
-                </Button>
-                <Button size="lg" className="flex-1" onClick={confirmBooking}>
+              <div className="mt-6">
+                <Button
+                  size="lg"
+                  className="h-12 w-full px-8 text-base sm:w-auto"
+                  onClick={confirmBooking}
+                >
                   Confirm booking
                 </Button>
               </div>

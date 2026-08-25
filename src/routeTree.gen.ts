@@ -10,14 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
-import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as ServicesCommercialMallCleaningRouteImport } from './routes/services.commercial-mall-cleaning'
 import { Route as ServicesFactoryOfficeCleaningRouteImport } from './routes/services.factory-office-cleaning'
 import { Route as ServicesHomeCleaningRouteImport } from './routes/services.home-cleaning'
-import { Route as ServicesMoveInMoveOutCleaningRouteImport } from './routes/services.move-in-move-out-cleaning'
+import { Route as ServicesMoveInCleaningRouteImport } from './routes/services.move-in-cleaning'
+import { Route as ServicesMoveOutCleaningRouteImport } from './routes/services.move-out-cleaning'
 import { Route as ServicesPostRenovationCleaningRouteImport } from './routes/services.post-renovation-cleaning'
 
 const IndexRoute = IndexRouteImport.update({
@@ -25,9 +28,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsRoute = BookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -38,11 +56,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ThankYouRoute = ThankYouRouteImport.update({
   id: '/thank-you',
   path: '/thank-you',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WelcomeRoute = WelcomeRouteImport.update({
-  id: '/welcome',
-  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesCommercialMallCleaningRoute =
@@ -62,12 +75,16 @@ const ServicesHomeCleaningRoute = ServicesHomeCleaningRouteImport.update({
   path: '/services/home-cleaning',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ServicesMoveInMoveOutCleaningRoute =
-  ServicesMoveInMoveOutCleaningRouteImport.update({
-    id: '/services/move-in-move-out-cleaning',
-    path: '/services/move-in-move-out-cleaning',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const ServicesMoveInCleaningRoute = ServicesMoveInCleaningRouteImport.update({
+  id: '/services/move-in-cleaning',
+  path: '/services/move-in-cleaning',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesMoveOutCleaningRoute = ServicesMoveOutCleaningRouteImport.update({
+  id: '/services/move-out-cleaning',
+  path: '/services/move-out-cleaning',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesPostRenovationCleaningRoute =
   ServicesPostRenovationCleaningRouteImport.update({
     id: '/services/post-renovation-cleaning',
@@ -77,90 +94,111 @@ const ServicesPostRenovationCleaningRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/bookings': typeof BookingsRoute
   '/privacy': typeof PrivacyRoute
+  '/reviews': typeof ReviewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thank-you': typeof ThankYouRoute
-  '/welcome': typeof WelcomeRoute
   '/services/commercial-mall-cleaning': typeof ServicesCommercialMallCleaningRoute
   '/services/factory-office-cleaning': typeof ServicesFactoryOfficeCleaningRoute
   '/services/home-cleaning': typeof ServicesHomeCleaningRoute
-  '/services/move-in-move-out-cleaning': typeof ServicesMoveInMoveOutCleaningRoute
+  '/services/move-in-cleaning': typeof ServicesMoveInCleaningRoute
+  '/services/move-out-cleaning': typeof ServicesMoveOutCleaningRoute
   '/services/post-renovation-cleaning': typeof ServicesPostRenovationCleaningRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/bookings': typeof BookingsRoute
   '/privacy': typeof PrivacyRoute
+  '/reviews': typeof ReviewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thank-you': typeof ThankYouRoute
-  '/welcome': typeof WelcomeRoute
   '/services/commercial-mall-cleaning': typeof ServicesCommercialMallCleaningRoute
   '/services/factory-office-cleaning': typeof ServicesFactoryOfficeCleaningRoute
   '/services/home-cleaning': typeof ServicesHomeCleaningRoute
-  '/services/move-in-move-out-cleaning': typeof ServicesMoveInMoveOutCleaningRoute
+  '/services/move-in-cleaning': typeof ServicesMoveInCleaningRoute
+  '/services/move-out-cleaning': typeof ServicesMoveOutCleaningRoute
   '/services/post-renovation-cleaning': typeof ServicesPostRenovationCleaningRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/bookings': typeof BookingsRoute
   '/privacy': typeof PrivacyRoute
+  '/reviews': typeof ReviewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thank-you': typeof ThankYouRoute
-  '/welcome': typeof WelcomeRoute
   '/services/commercial-mall-cleaning': typeof ServicesCommercialMallCleaningRoute
   '/services/factory-office-cleaning': typeof ServicesFactoryOfficeCleaningRoute
   '/services/home-cleaning': typeof ServicesHomeCleaningRoute
-  '/services/move-in-move-out-cleaning': typeof ServicesMoveInMoveOutCleaningRoute
+  '/services/move-in-cleaning': typeof ServicesMoveInCleaningRoute
+  '/services/move-out-cleaning': typeof ServicesMoveOutCleaningRoute
   '/services/post-renovation-cleaning': typeof ServicesPostRenovationCleaningRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/bookings'
     | '/privacy'
+    | '/reviews'
     | '/sitemap.xml'
     | '/thank-you'
-    | '/welcome'
     | '/services/commercial-mall-cleaning'
     | '/services/factory-office-cleaning'
     | '/services/home-cleaning'
-    | '/services/move-in-move-out-cleaning'
+    | '/services/move-in-cleaning'
+    | '/services/move-out-cleaning'
     | '/services/post-renovation-cleaning'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/bookings'
     | '/privacy'
+    | '/reviews'
     | '/sitemap.xml'
     | '/thank-you'
-    | '/welcome'
     | '/services/commercial-mall-cleaning'
     | '/services/factory-office-cleaning'
     | '/services/home-cleaning'
-    | '/services/move-in-move-out-cleaning'
+    | '/services/move-in-cleaning'
+    | '/services/move-out-cleaning'
     | '/services/post-renovation-cleaning'
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/bookings'
     | '/privacy'
+    | '/reviews'
     | '/sitemap.xml'
     | '/thank-you'
-    | '/welcome'
     | '/services/commercial-mall-cleaning'
     | '/services/factory-office-cleaning'
     | '/services/home-cleaning'
-    | '/services/move-in-move-out-cleaning'
+    | '/services/move-in-cleaning'
+    | '/services/move-out-cleaning'
     | '/services/post-renovation-cleaning'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BookingsRoute: typeof BookingsRoute
   PrivacyRoute: typeof PrivacyRoute
+  ReviewsRoute: typeof ReviewsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThankYouRoute: typeof ThankYouRoute
-  WelcomeRoute: typeof WelcomeRoute
   ServicesCommercialMallCleaningRoute: typeof ServicesCommercialMallCleaningRoute
   ServicesFactoryOfficeCleaningRoute: typeof ServicesFactoryOfficeCleaningRoute
   ServicesHomeCleaningRoute: typeof ServicesHomeCleaningRoute
-  ServicesMoveInMoveOutCleaningRoute: typeof ServicesMoveInMoveOutCleaningRoute
+  ServicesMoveInCleaningRoute: typeof ServicesMoveInCleaningRoute
+  ServicesMoveOutCleaningRoute: typeof ServicesMoveOutCleaningRoute
   ServicesPostRenovationCleaningRoute: typeof ServicesPostRenovationCleaningRoute
 }
 
@@ -173,11 +211,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings': {
+      id: '/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof BookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -192,13 +251,6 @@ declare module '@tanstack/react-router' {
       path: '/thank-you'
       fullPath: '/thank-you'
       preLoaderRoute: typeof ThankYouRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/welcome': {
-      id: '/welcome'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/commercial-mall-cleaning': {
@@ -222,11 +274,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesHomeCleaningRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/services/move-in-move-out-cleaning': {
-      id: '/services/move-in-move-out-cleaning'
-      path: '/services/move-in-move-out-cleaning'
-      fullPath: '/services/move-in-move-out-cleaning'
-      preLoaderRoute: typeof ServicesMoveInMoveOutCleaningRouteImport
+    '/services/move-in-cleaning': {
+      id: '/services/move-in-cleaning'
+      path: '/services/move-in-cleaning'
+      fullPath: '/services/move-in-cleaning'
+      preLoaderRoute: typeof ServicesMoveInCleaningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/move-out-cleaning': {
+      id: '/services/move-out-cleaning'
+      path: '/services/move-out-cleaning'
+      fullPath: '/services/move-out-cleaning'
+      preLoaderRoute: typeof ServicesMoveOutCleaningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/post-renovation-cleaning': {
@@ -241,14 +300,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BookingsRoute: BookingsRoute,
   PrivacyRoute: PrivacyRoute,
+  ReviewsRoute: ReviewsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThankYouRoute: ThankYouRoute,
-  WelcomeRoute: WelcomeRoute,
   ServicesCommercialMallCleaningRoute: ServicesCommercialMallCleaningRoute,
   ServicesFactoryOfficeCleaningRoute: ServicesFactoryOfficeCleaningRoute,
   ServicesHomeCleaningRoute: ServicesHomeCleaningRoute,
-  ServicesMoveInMoveOutCleaningRoute: ServicesMoveInMoveOutCleaningRoute,
+  ServicesMoveInCleaningRoute: ServicesMoveInCleaningRoute,
+  ServicesMoveOutCleaningRoute: ServicesMoveOutCleaningRoute,
   ServicesPostRenovationCleaningRoute: ServicesPostRenovationCleaningRoute,
 }
 export const routeTree = rootRouteImport
