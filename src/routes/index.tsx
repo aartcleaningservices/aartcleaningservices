@@ -16,7 +16,6 @@ import {
   Users,
 } from "lucide-react";
 import { FaWhatsapp } from "@/components/site/WhatsAppIcon";
-import heroImage from "@/assets/hero-cleaning.webp";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
@@ -24,6 +23,11 @@ import { FaqSection, faqs } from "@/components/site/FaqSection";
 import { Button } from "@/components/ui/button";
 import { BUSINESS, services } from "@/lib/services";
 import { absoluteUrl } from "@/lib/seo";
+
+import hero640 from "@/assets/hero-cleaning-640.webp";
+import hero960 from "@/assets/hero-cleaning-960.webp";
+import hero1200 from "@/assets/hero-cleaning-1200.webp";
+import hero1509 from "@/assets/hero-cleaning-1509.webp";
 
 const EVENTS_HREF =
   "https://wa.me/60135519772?text=Hi%20Aart%20Cleaning%2C%20I%20need%20cleaning%20for%20an%20event";
@@ -44,9 +48,20 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      
       { rel: "canonical", href: absoluteUrl("/") },
-      { rel: "preload", href: heroImage, as: "image", fetchPriority: "high" },
+      {
+        rel: "preload",
+        as: "image",
+        href: hero1200,
+        imageSrcSet: `
+          ${hero640} 640w,
+          ${hero960} 960w,
+          ${hero1200} 1200w,
+          ${hero1509} 1509w
+        `,
+        imageSizes: "(max-width: 768px) 100vw, 578px",
+        fetchPriority: "high",
+      },
     ],
     scripts: [
       {
@@ -184,14 +199,21 @@ function LandingPage() {
 
             <div className="relative">
               <img
-                src={heroImage}
-                alt="Aart Cleaning Services cleaner wiping a surface in a bright, freshly cleaned Malaysian living room"
-                width={1600}
-                height={1104}
+                src={hero960}
+                srcSet={`
+                  ${hero640} 640w,
+                  ${hero960} 960w,
+                  ${hero1200} 1200w,
+                  ${hero1509} 1509w
+                `}
+                sizes="(max-width: 768px) 100vw, 578px"
+                width={1509}
+                height={1042}
+                alt="Professional home cleaning service in Kota Kemuning, Shah Alam by Aart Cleaning Services"
                 fetchPriority="high"
-                decoding="async"
                 loading="eager"
-                className="aspect-4/3 w-full rounded-3xl object-cover shadow-lift"
+                decoding="async"
+                className="w-full h-auto object-cover rounded-3xl"
               />
               <div className="absolute -bottom-6 left-4 rounded-2xl border border-border bg-card p-4 shadow-soft sm:left-8">
                 <p className="font-display text-2xl font-bold">RM 25</p>
