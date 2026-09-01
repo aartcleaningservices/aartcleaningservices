@@ -240,11 +240,6 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
     });
   };
 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const phoneRef = useRef<HTMLInputElement>(null);
-  const fieldRefs = { name: nameRef, email: emailRef, phone: phoneRef };
-  
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const next: Partial<Record<LeadFieldKey, string>> = {};
@@ -253,17 +248,9 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
     else if (!EMAIL_REGEX.test(values.email.trim()))
       next.email = "Enter a valid email like name@example.com";
     if (!values.phone.trim()) next.phone = "Please enter your phone number";
-  
+
     setErrors(next);
-    if (Object.keys(next).length > 0) {
-      const firstKey = (["name", "email", "phone"] as const).find((k) => next[k]);
-      if (firstKey) {
-        const el = fieldRefs[firstKey].current;
-        el?.scrollIntoView({ behavior: "smooth", block: "center" });
-        el?.focus({ preventScroll: true }); // preventScroll so it doesn't double-jump instantly first
-      }
-      return;
-    }
+    if (Object.keys(next).length > 0) return;
 
     const clean = {
       name: values.name.trim(),
