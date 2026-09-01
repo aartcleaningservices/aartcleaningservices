@@ -20,11 +20,7 @@ import heroImage from "@/assets/hero-cleaning.webp";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
-
-import { lazy, Suspense } from "react";
-import { faqs } from "@/components/site/FaqSection";
-
-const FaqSection = lazy(() => import("@/components/site/FaqSection"));
+import { FaqSection, faqs } from "@/components/site/FaqSection";
 import { Button } from "@/components/ui/button";
 import { BUSINESS, services } from "@/lib/services";
 import { absoluteUrl } from "@/lib/seo";
@@ -307,9 +303,7 @@ function LandingPage() {
         </section>
 
         <div className="py-12 sm:py-14">
-          <Suspense fallback={null}>
-            <FaqSection />
-          </Suspense>
+          <FaqSection />
         </div>
 
       </main>

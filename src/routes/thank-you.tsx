@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { FaWhatsapp } from "@/components/site/WhatsAppIcon";
@@ -11,7 +11,7 @@ const TITLE = "Thank You - Booking Received | Aart Cleaning Services";
 const DESCRIPTION =
   "Thanks for booking with Aart Cleaning Services. Our team will confirm your cleaning slot by phone shortly.";
 
-export const Route = createLazyFileRoute("/thank-you")({
+export const Route = createFileRoute("/thank-you")({
   head: () => ({
     meta: [
       { title: TITLE },
