@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, Quote, Phone, Star } from "lucide-react";
+import { ArrowRight, BadgeCheck, Quote, Star } from "lucide-react";
+import { FaWhatsapp } from "@/components/site/WhatsAppIcon";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
 import { Button } from "@/components/ui/button";
 import { BUSINESS } from "@/lib/services";
+import { absoluteUrl } from "@/lib/seo";
 
 const TITLE = "Customer Reviews & Testimonials | Aart Cleaning Services";
 const DESCRIPTION =
@@ -64,9 +66,10 @@ export const Route = createFileRoute("/reviews")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: absoluteUrl("/reviews") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/reviews" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/reviews") }],
     scripts: [
       {
         type: "application/ld+json",
@@ -103,6 +106,7 @@ function ReviewPage() {
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
       <main>
+      <main>
         <section className="bg-gradient-soft">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
@@ -123,7 +127,7 @@ function ReviewPage() {
               </Button>
               <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
                 <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
-                  <Phone className="size-4" /> {BUSINESS.phone}
+                  <FaWhatsapp className="size-4" /> {BUSINESS.phone}
                 </a>
               </Button>
             </div>
@@ -188,7 +192,7 @@ function ReviewPage() {
                 className="w-full border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
               >
                 <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
-                  <Phone className="size-4" /> {BUSINESS.phone}
+                  <FaWhatsapp className="size-4" /> {BUSINESS.phone}
                 </a>
               </Button>
             </div>
@@ -196,6 +200,7 @@ function ReviewPage() {
         </section>
       </main>
 
+      </main>
       <SiteFooter />
       <StickyMobileCta />
     </div>

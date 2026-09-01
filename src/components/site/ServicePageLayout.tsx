@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Check, CircleAlert, Phone } from "lucide-react";
+import { ArrowRight, Check, CircleAlert } from "lucide-react";
+import { FaWhatsapp } from "./WhatsAppIcon";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
@@ -18,6 +19,7 @@ export function ServicePageLayout({
   return (
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
+      <main>
       <main>
         <section className="bg-gradient-soft">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2">
@@ -44,7 +46,7 @@ export function ServicePageLayout({
                 </Button>
                 <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
                   <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
-                    <Phone className="size-4" /> {BUSINESS.phone}
+                    <FaWhatsapp className="size-4" /> {BUSINESS.phone}
                   </a>
                 </Button>
               </div>
@@ -54,6 +56,7 @@ export function ServicePageLayout({
               alt={heroAlt}
               width={1600}
               height={1104}
+            fetchPriority="high"
               className="aspect-4/3 w-full rounded-3xl object-cover shadow-lift"
             />
           </div>
@@ -130,7 +133,7 @@ export function ServicePageLayout({
                 className="w-full border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
               >
                 <a href={BUSINESS.phoneHref} target="_blank" rel="noopener noreferrer">
-                  <Phone className="size-4" /> {BUSINESS.phone}
+                  <FaWhatsapp className="size-4" /> {BUSINESS.phone}
                 </a>
               </Button>
             </div>
@@ -138,6 +141,7 @@ export function ServicePageLayout({
         </div>
       </main>
 
+      </main>
       <SiteFooter />
       <StickyMobileCta />
     </div>

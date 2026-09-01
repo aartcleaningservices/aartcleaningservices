@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
 import { Button } from "@/components/ui/button";
 import { BUSINESS } from "@/lib/services";
+import { absoluteUrl } from "@/lib/seo";
 
 const TITLE = "About Us | Aart Cleaning Services";
 const DESCRIPTION =
@@ -21,10 +22,10 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: absoluteUrl("/about") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/about") }],
   }),
   component: AboutPage,
 });
@@ -56,6 +57,7 @@ function AboutPage() {
   return (
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
+      <main>
 
 +      <main>
         <section className="bg-gradient-soft">
@@ -137,6 +139,7 @@ function AboutPage() {
         </section>
         </main>
 
+      </main>
       <SiteFooter />
       <StickyMobileCta />
     </div>

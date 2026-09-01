@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { CheckCircle2, Phone } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import { FaWhatsapp } from "@/components/site/WhatsAppIcon";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { BUSINESS } from "@/lib/services";
+import { absoluteUrl } from "@/lib/seo";
 
 const TITLE = "Thank You - Booking Received | Aart Cleaning Services";
 const DESCRIPTION =
@@ -17,11 +19,11 @@ export const Route = createFileRoute("/thank-you")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/thank-you" },
+      { property: "og:url", content: absoluteUrl("/thank-you") },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "/thank-you" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/thank-you") }],
   }),
   component: ThankYouPage,
 });
@@ -75,7 +77,7 @@ function ThankYouPage() {
           </Button>
           <Button asChild size="lg" variant="outline">
             <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
-              <Phone className="size-4" /> {BUSINESS.phone}
+              <FaWhatsapp className="size-4" /> {BUSINESS.phone}
             </a>
           </Button>
         </div>

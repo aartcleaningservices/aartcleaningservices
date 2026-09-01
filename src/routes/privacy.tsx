@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { BUSINESS } from "@/lib/services";
+import { absoluteUrl } from "@/lib/seo";
 
 const TITLE = "Privacy Policy | Aart Cleaning Services";
 const DESCRIPTION =
@@ -15,10 +16,10 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/privacy" },
+      { property: "og:url", content: absoluteUrl("/privacy") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/privacy" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/privacy") }],
   }),
   component: PrivacyPage,
 });

@@ -2,6 +2,22 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Self-hosted latin variable fonts - preloaded in __root head to break the CSS -> font chain */
+@font-face {
+  font-family: "Space Grotesk Variable";
+  src: url("/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope Variable";
+  src: url("/fonts/manrope-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -76,6 +92,7 @@
   --secondary-foreground: oklch(0.32 0.05 195);
   --muted: oklch(0.955 0.012 140);
   --muted-foreground: oklch(0.51 0.024 195);
+  /* Yellow gold accent */
   --accent: oklch(0.83 0.16 92);
   --accent-foreground: oklch(0.27 0.05 90);
   --destructive: oklch(0.577 0.21 27.325);
@@ -97,8 +114,9 @@
   --sidebar-border: oklch(0.9 0.016 175);
   --sidebar-ring: oklch(0.5 0.096 195);
 
-  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-ui: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
 
   --gradient-deep: linear-gradient(
     135deg,
@@ -108,17 +126,19 @@
   );
   --gradient-soft: linear-gradient(
     180deg,
-    oklch(0.985 0.008 120) 0%,
-    oklch(0.955 0.022 170) 100%
+    oklch(1 0 0) 0%,
+    oklch(0.955 0.012 140) 100%
   );
-  --shadow-soft: 0 1px 2px oklch(0.36 0.07 200 / 0.06),
-    0 10px 30px -12px oklch(0.36 0.07 200 / 0.18);
-  --shadow-lift: 0 24px 60px -24px oklch(0.36 0.07 200 / 0.35);
+  --shadow-soft: 0 1px 2px oklch(0.24 0.03 190 / 0.06),
+    0 10px 30px -12px oklch(0.24 0.03 190 / 0.16);
+  --shadow-lift: 0 24px 60px -24px oklch(0.24 0.03 190 / 0.3);
 }
+
 
 @theme inline {
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-ui: var(--font-ui);
   --color-primary-glow: var(--primary-glow);
   --shadow-soft: var(--shadow-soft);
   --shadow-lift: var(--shadow-lift);
@@ -136,13 +156,21 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  button,
+  input,
+  select,
+  textarea,
+  .font-ui {
+    font-family: var(--font-ui);
+  }
+
   h1,
   h2,
   h3,
   h4,
   .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 }
 
@@ -203,7 +231,7 @@
   border-color: color-mix(in oklab, var(--svc) 80%, var(--color-foreground) 20%);
   transform: translateY(-3px);
   box-shadow:
-    0 1px 2px oklch(0.36 0.07 200 / 0.06),
+    0 1px 2px oklch(0.24 0.03 190 / 0.06),
     0 14px 32px -16px color-mix(in oklab, var(--svc) 70%, transparent);
 }
 

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BadgePercent,
   Calendar,
@@ -24,6 +24,7 @@ import { BUSINESS } from "@/lib/services";
 import { cn } from "@/lib/utils";
 import { postStepData } from "@/lib/submitLead";
 import { COUNTRY_CODES, matchDial } from "@/lib/countryCodes";
+import { absoluteUrl } from "@/lib/seo";
 
 const TITLE = "Book Your Clean | Aart Cleaning Services";
 const DESCRIPTION =
@@ -37,11 +38,11 @@ export const Route = createFileRoute("/bookings")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/bookings" },
+      { property: "og:url", content: absoluteUrl("/bookings") },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "/bookings" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/bookings") }],
   }),
   component: WelcomePage,
 });
@@ -240,6 +241,11 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
     });
   };
 
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const fieldRefs = { name: nameRef, email: emailRef, phone: phoneRef };
+  
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const next: Partial<Record<LeadFieldKey, string>> = {};
@@ -248,14 +254,22 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
     else if (!EMAIL_REGEX.test(values.email.trim()))
       next.email = "Enter a valid email like name@example.com";
     if (!values.phone.trim()) next.phone = "Please enter your phone number";
-
+  
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      const firstKey = (["name", "email", "phone"] as const).find((k) => next[k]);
+      if (firstKey) {
+        const el = fieldRefs[firstKey].current;
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        el?.focus({ preventScroll: true }); // preventScroll so it doesn't double-jump instantly first
+      }
+      return;
+    }
 
     const clean = {
       name: values.name.trim(),
       email: values.email.trim(),
-      phone: `${country.dial} ${values.phone.trim()}`.trim(),
+      phone: `${country.dial} ${values.phone.trim()}`.trim().replace(/\+/g, ""),
     };
     try {
       sessionStorage.setItem("aart_lead", JSON.stringify(clean));
@@ -269,10 +283,10 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
 
   const fieldClass = (key: LeadFieldKey) =>
     cn(
-      "h-12 w-full rounded-xl border bg-card px-4 text-base outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-ring/25",
+      "h-12 w-full rounded-xl border bg-card px-4 text-base outline-none transition-colors placeholder:text-muted-foreground/70",
       errors[key]
-        ? "border-destructive bg-destructive/5 ring-2 ring-destructive/25"
-        : "border-input",
+        ? "border-destructive bg-destructive/5 ring-2 ring-destructive/25 focus:border-destructive focus:ring-destructive/25"
+        : "border-input focus:border-primary focus:ring-2 focus:ring-ring/25",
     );
 
   return (
@@ -297,6 +311,7 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
           <input
             id="lead-name"
             name="name"
+            ref={nameRef}
             autoComplete="name"
             value={values.name}
             onChange={(e) => setValue("name", e.target.value)}
@@ -319,6 +334,7 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
             type="email"
             inputMode="email"
             autoComplete="email"
+            ref={emailRef}
             value={values.email}
             onChange={(e) => setValue("email", e.target.value)}
             onBlur={validateEmailOnBlur}
@@ -364,6 +380,7 @@ function LeadForm({ onComplete, initialValues }: LeadFormProps) {
               type="tel"
               inputMode="tel"
               autoComplete="tel"
+              ref={phoneRef}
               value={values.phone}
               onChange={(e) => setValue("phone", e.target.value)}
               placeholder="12 345 6789"
@@ -393,7 +410,6 @@ function WelcomePage() {
   const [lead, setLead] = useState<LeadValues | null>(null);
   const leadName = lead?.name ?? "";
 
-  // Step 1
   const [address, setAddress] = useState<Record<AddressKey, string>>({
     address: "",
     postcode: "",
@@ -473,6 +489,13 @@ function WelcomePage() {
     );
   };
 
+  const addressRefs = {
+    address: useRef<HTMLInputElement>(null),
+    postcode: useRef<HTMLInputElement>(null),
+    city: useRef<HTMLInputElement>(null),
+    state: useRef<HTMLSelectElement>(null),
+  };
+
   const submitStep1 = () => {
     if (coords) {
       postStepData({ step: "location", email: lead?.email, coords });
@@ -483,19 +506,36 @@ function WelcomePage() {
       (k) => address[k].trim() === "",
     );
     setAddressErrors(missing);
-    if (missing.length === 0) {
-      postStepData({ step: "location", email: lead?.email, ...address });
-      setStep(3);
+    if (missing.length > 0) {
+      const firstKey = (["address", "postcode", "city", "state"] as const).find((k) =>
+        missing.includes(k),
+      );
+      if (firstKey) {
+        const el = addressRefs[firstKey].current;
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        el?.focus({ preventScroll: true });
+      }
+      return;
     }
+    postStepData({ step: "location", email: lead?.email, ...address });
+    setStep(3);
   };
-
+  const dateRef = useRef<HTMLButtonElement>(null);
+  const timeHeadingRef = useRef<HTMLHeadingElement>(null);
   const confirmBooking = () => {
     const errs: string[] = [];
     if (!date) errs.push("date");
     if (startHour === null) errs.push("time");
     setStep2Errors(errs);
-    if (errs.length > 0) return;
-
+    if (errs.length > 0) {
+      if (errs.includes("date")) {
+        dateRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        dateRef.current?.focus({ preventScroll: true });
+      } else if (errs.includes("time")) {
+        timeHeadingRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
     postStepData({
       step: "booking",
       email: lead?.email,
@@ -512,8 +552,10 @@ function WelcomePage() {
 
   const inputClass = (invalid: boolean) =>
     cn(
-      "mt-2 h-12 w-full rounded-xl border bg-card px-4 text-base outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-ring/25",
-      invalid ? "border-destructive bg-destructive/5 ring-2 ring-destructive/25" : "border-input",
+      "mt-2 h-12 w-full rounded-xl border bg-card px-4 text-base outline-none transition-colors",
+      invalid
+        ? "border-destructive bg-destructive/5 ring-2 ring-destructive/25 focus:border-destructive focus:ring-destructive/25"
+        : "border-input focus:border-primary focus:ring-2 focus:ring-ring/25",
     );
 
   return (
@@ -653,6 +695,7 @@ function WelcomePage() {
                 </label>
                 <input
                   id="address"
+                  ref={addressRefs.address}
                   value={address.address}
                   onChange={(e) => setAddress((a) => ({ ...a, address: e.target.value }))}
                   placeholder="12-3, Jalan Kuchai Lama"
@@ -668,6 +711,7 @@ function WelcomePage() {
                   <input
                     id="postcode"
                     inputMode="numeric"
+                    ref={addressRefs.postcode}
                     value={address.postcode}
                     onChange={(e) => {
                       const postcode = e.target.value;
@@ -687,6 +731,7 @@ function WelcomePage() {
                   </label>
                   <input
                     id="city"
+                    ref={addressRefs.city}
                     value={address.city}
                     onChange={(e) => setAddress((a) => ({ ...a, city: e.target.value }))}
                     placeholder="Klang"
@@ -701,6 +746,7 @@ function WelcomePage() {
                 </label>
                 <select
                   id="state"
+                  ref={addressRefs.state}
                   value={address.state}
                   onChange={(e) => setAddress((a) => ({ ...a, state: e.target.value }))}
                   aria-invalid={addressErrors.includes("state")}
@@ -776,6 +822,7 @@ function WelcomePage() {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
+                    ref={dateRef}
                     aria-invalid={step2Errors.includes("date")}
                     className={cn(
                       inputClass(step2Errors.includes("date")),
@@ -837,7 +884,7 @@ function WelcomePage() {
                 })}
               </div>
 
-              <h3 className="mt-8 flex items-center gap-2 font-display text-lg font-bold">
+              <h3 ref={timeHeadingRef} className="mt-8 flex items-center gap-2 font-display text-lg font-bold">
                 <Clock className="size-5 text-primary" /> Start time
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">

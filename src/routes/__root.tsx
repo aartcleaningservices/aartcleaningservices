@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-soft px-4 text-center">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-soft px-4 text-center">
       <p className="font-display text-7xl font-bold text-primary">404</p>
       <h1 className="mt-4 font-display text-2xl font-bold text-foreground">
         This page has been swept away
@@ -43,7 +43,7 @@ function NotFoundComponent() {
           Call +60 13 551 9772
         </a>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -103,15 +103,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      // Preload the two latin variable fonts so they fetch in parallel with
+      // the stylesheet instead of waiting for CSS parse (breaks the chain).
+      {
+        rel: "preload",
+        href: "/fonts/space-grotesk-latin-wght-normal.woff2",
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: "/fonts/manrope-latin-wght-normal.woff2",
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
         href: appCss,
-      },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],

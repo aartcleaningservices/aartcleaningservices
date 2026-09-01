@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePageLayout } from "@/components/site/ServicePageLayout";
 import { getService } from "@/lib/services";
 import heroImage from "@/assets/service-move-out.webp";
+import { absoluteUrl } from "@/lib/seo";
 
 const service = getService("move-out-cleaning");
 
@@ -13,10 +14,13 @@ export const Route = createFileRoute("/services/move-out-cleaning")({
       { property: "og:title", content: service.metaTitle },
       { property: "og:description", content: service.metaDescription },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: service.path },
+      { property: "og:url", content: absoluteUrl(service.path) },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: service.path }],
+    links: [
+      { rel: "canonical", href: absoluteUrl(service.path) },
+      { rel: "preload", href: heroImage, as: "image", fetchPriority: "high" },
+    ],
   }),
   component: () => (
     <ServicePageLayout

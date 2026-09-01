@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Phone,
   ArrowRight,
   BadgePercent,
   Clock,
@@ -16,6 +15,7 @@ import {
   Truck,
   Users,
 } from "lucide-react";
+import { FaWhatsapp } from "@/components/site/WhatsAppIcon";
 import heroImage from "@/assets/hero-cleaning.webp";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -23,6 +23,7 @@ import { StickyMobileCta } from "@/components/site/StickyMobileCta";
 import { FaqSection, faqs } from "@/components/site/FaqSection";
 import { Button } from "@/components/ui/button";
 import { BUSINESS, services } from "@/lib/services";
+import { absoluteUrl } from "@/lib/seo";
 
 const EVENTS_HREF =
   "https://wa.me/60135519772?text=Hi%20Aart%20Cleaning%2C%20I%20need%20cleaning%20for%20an%20event";
@@ -39,11 +40,14 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: absoluteUrl("/") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "/" },
+      
+      { rel: "canonical", href: absoluteUrl("/") },
+      { rel: "preload", href: heroImage, as: "image", fetchPriority: "high" },
+    ,
       { rel: "preload", as: "image", href: heroImage, fetchpriority: "high" },
     ],
     scripts: [
@@ -58,7 +62,7 @@ export const Route = createFileRoute("/")({
           description: DESCRIPTION,
           telephone: BUSINESS.phone,
           email: BUSINESS.email,
-          url: "/",
+           url: absoluteUrl("/"),
           priceRange: "RM25+ per hour",
           areaServed: [
             { "@type": "City", name: "Klang" },
@@ -146,6 +150,7 @@ function LandingPage() {
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
       <main>
+      <main>
         <section className="relative overflow-hidden bg-gradient-soft">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2">
             <div>
@@ -166,7 +171,7 @@ function LandingPage() {
                 </Button>
                 <Button asChild size="lg" variant="outline">
                   <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
-                    <Phone className="size-4" /> {BUSINESS.phone}
+                    <FaWhatsapp className="size-4" /> {BUSINESS.phone}
                   </a>
                 </Button>
               </div>
@@ -186,6 +191,7 @@ function LandingPage() {
                 alt="Aart Cleaning Services cleaner wiping a surface in a bright, freshly cleaned Malaysian living room"
                 width={1600}
                 height={1104}
+              fetchPriority="high"
                 fetchPriority="high"
                 className="aspect-4/3 w-full rounded-3xl object-cover shadow-lift"
               />
@@ -290,7 +296,7 @@ function LandingPage() {
                   className="w-full border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
                 >
                   <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer">
-                    <Phone className="size-4" /> {BUSINESS.phone}
+                    <FaWhatsapp className="size-4" /> {BUSINESS.phone}
                   </a>
                 </Button>
             </div>
@@ -302,6 +308,7 @@ function LandingPage() {
         </div>
 +     </main>
 
+      </main>
       <SiteFooter />
       <StickyMobileCta />
     </div>

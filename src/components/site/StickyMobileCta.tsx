@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Phone } from "lucide-react";
+import { FaWhatsapp } from "./WhatsAppIcon";
 import { BUSINESS } from "@/lib/services";
 
 export function StickyMobileCta() {
@@ -10,7 +10,7 @@ export function StickyMobileCta() {
           href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer"
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border px-3 py-3 text-sm font-semibold"
         >
-          <Phone className="size-4 text-primary" /> WhatsApp us
+          <FaWhatsapp className="size-4 text-primary" /> WhatsApp us
         </a>
         <span aria-hidden className="w-px shrink-0 self-stretch bg-border" />
         <Link

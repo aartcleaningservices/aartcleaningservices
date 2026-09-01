@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, Phone, Sparkles, X } from "lucide-react";
+import { Menu, Sparkles, X } from "lucide-react";
+import { FaWhatsapp } from "./WhatsAppIcon";
 import { BUSINESS, services } from "@/lib/services";
 import { Button } from "@/components/ui/button";
 
@@ -22,12 +23,12 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="ml-auto flex items-center justify-end gap-2">
+        <nav aria-label="Main navigation" className="ml-auto flex items-center justify-end gap-2">
           <a
             href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded-full border border-border px-3 py-2 text-sm font-semibold md:flex"
           >
-            <Phone className="size-4 text-primary" />
+            <FaWhatsapp className="size-4 text-primary" />
             {BUSINESS.phone}
           </a>
           <Button asChild size="sm" className="hidden md:inline-flex">
@@ -36,16 +37,18 @@ export function SiteHeader() {
           <button
             type="button"
             aria-label="Toggle menu"
+            aria-expanded={open}
+            aria-controls="site-menu"
             onClick={() => setOpen((v) => !v)}
             className="grid size-10 place-items-center rounded-xl border border-border"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
-        </div>
+        </nav>
       </div>
 
       {open && (
-        <nav className="border-t border-border bg-background px-4 py-3">
+        <div id="site-menu" className="border-t border-border bg-background px-4 py-3">
           {services.map((s) => (
             <Link
               key={s.slug}
@@ -77,7 +80,7 @@ export function SiteHeader() {
           >
             Book & save 10%
           </Link>
-        </nav>
+        </div>
       )}
     </header>
   );

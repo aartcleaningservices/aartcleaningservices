@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { FaWhatsapp } from "./WhatsAppIcon";
 import { BUSINESS, services } from "@/lib/services";
 
 export function SiteFooter() {
@@ -13,7 +14,7 @@ export function SiteFooter() {
           </p>
           <div className="mt-5 space-y-2 text-sm">
             <a href={BUSINESS.waHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-semibold">
-              <Phone className="size-4 text-primary" /> {BUSINESS.phone}
+              <FaWhatsapp className="size-4 text-primary" /> {BUSINESS.phone}
             </a>
             <a href={`mailto:${BUSINESS.email}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
               <Mail className="size-4 text-primary" /> {BUSINESS.email}
