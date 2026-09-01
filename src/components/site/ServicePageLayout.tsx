@@ -20,7 +20,6 @@ export function ServicePageLayout({
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
       <main>
-      <main>
         <section className="bg-gradient-soft">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2">
             <div>
@@ -139,7 +138,6 @@ export function ServicePageLayout({
             </div>
           </div>
         </div>
-      </main>
 
       </main>
       <SiteFooter />

@@ -59,7 +59,6 @@ function AboutPage() {
       <SiteHeader />
       <main>
 
-+      <main>
         <section className="bg-gradient-soft">
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">About us</p>
@@ -137,7 +136,6 @@ function AboutPage() {
             </div>
           </div>
         </section>
-        </main>
 
       </main>
       <SiteFooter />

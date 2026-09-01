@@ -150,7 +150,6 @@ function LandingPage() {
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
       <main>
-      <main>
         <section className="relative overflow-hidden bg-gradient-soft">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2">
             <div>
@@ -306,7 +305,6 @@ function LandingPage() {
         <div className="py-12 sm:py-14">
           <FaqSection />
         </div>
-+     </main>
 
       </main>
       <SiteFooter />

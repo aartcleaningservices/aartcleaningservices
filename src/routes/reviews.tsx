@@ -106,7 +106,6 @@ function ReviewPage() {
     <div className="min-h-screen pb-24 md:pb-0">
       <SiteHeader />
       <main>
-      <main>
         <section className="bg-gradient-soft">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
@@ -198,7 +197,6 @@ function ReviewPage() {
             </div>
           </div>
         </section>
-      </main>
 
       </main>
       <SiteFooter />
