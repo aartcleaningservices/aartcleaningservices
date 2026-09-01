@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BadgeCheck, Quote, Star } from "lucide-react";
 import { FaWhatsapp } from "@/components/site/WhatsAppIcon";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -58,7 +58,7 @@ const proof = [
   { value: "4", label: "Towns served across Selangor" },
 ];
 
-export const Route = createFileRoute("/reviews")({
+export const Route = createLazyFileRoute("/reviews")({
   head: () => ({
     meta: [
       { title: TITLE },

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { BUSINESS } from "@/lib/services";
@@ -8,7 +8,7 @@ const TITLE = "Privacy Policy | Aart Cleaning Services";
 const DESCRIPTION =
   "How Aart Cleaning Services collects, uses and protects the name, email, phone number and address you share when booking a cleaning session.";
 
-export const Route = createFileRoute("/privacy")({
+export const Route = createLazyFileRoute("/privacy")({
   head: () => ({
     meta: [
       { title: TITLE },

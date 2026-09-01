@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Compass, HeartHandshake, ShieldCheck, Sparkles, Target, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -14,7 +14,7 @@ const DESCRIPTION =
 const JOIN_HREF =
   "https://wa.me/60135519772?text=Hi%20Aart%20Cleaning%2C%20I%20would%20like%20to%20join%20your%20cleaning%20team";
 
-export const Route = createFileRoute("/about")({
+export const Route = createLazyFileRoute("/about")({
   head: () => ({
     meta: [
       { title: TITLE },

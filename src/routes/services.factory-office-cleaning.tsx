@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { ServicePageLayout } from "@/components/site/ServicePageLayout";
 import { getService } from "@/lib/services";
 import heroImage from "@/assets/service-office.webp";
@@ -6,7 +6,7 @@ import { absoluteUrl } from "@/lib/seo";
 
 const service = getService("factory-office-cleaning");
 
-export const Route = createFileRoute("/services/factory-office-cleaning")({
+export const Route = createLazyFileRoute("/services/factory-office-cleaning")({
   head: () => ({
     meta: [
       { title: service.metaTitle },

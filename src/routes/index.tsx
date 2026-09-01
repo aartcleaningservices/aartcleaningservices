@@ -20,7 +20,11 @@ import heroImage from "@/assets/hero-cleaning.webp";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { StickyMobileCta } from "@/components/site/StickyMobileCta";
-import { FaqSection, faqs } from "@/components/site/FaqSection";
+
+import { lazy, Suspense } from "react";
+import { faqs } from "@/components/site/FaqSection";
+
+const FaqSection = lazy(() => import("@/components/site/FaqSection"));
 import { Button } from "@/components/ui/button";
 import { BUSINESS, services } from "@/lib/services";
 import { absoluteUrl } from "@/lib/seo";
@@ -47,8 +51,6 @@ export const Route = createFileRoute("/")({
       
       { rel: "canonical", href: absoluteUrl("/") },
       { rel: "preload", href: heroImage, as: "image", fetchPriority: "high" },
-    ,
-      { rel: "preload", as: "image", href: heroImage, fetchpriority: "high" },
     ],
     scripts: [
       {
@@ -190,8 +192,9 @@ function LandingPage() {
                 alt="Aart Cleaning Services cleaner wiping a surface in a bright, freshly cleaned Malaysian living room"
                 width={1600}
                 height={1104}
-              fetchPriority="high"
                 fetchPriority="high"
+                decoding="async"
+                loading="eager"
                 className="aspect-4/3 w-full rounded-3xl object-cover shadow-lift"
               />
               <div className="absolute -bottom-6 left-4 rounded-2xl border border-border bg-card p-4 shadow-soft sm:left-8">
@@ -229,6 +232,7 @@ function LandingPage() {
                 <Link
                   key={s.slug}
                   to={s.path}
+                  preload="intent"
                   className={`service-card group flex flex-col rounded-3xl border border-border bg-card p-6 ${theme?.tint ?? "svc-home"}`}
                 >
                   <span className="service-icon grid size-11 shrink-0 place-items-center rounded-2xl">
@@ -303,7 +307,9 @@ function LandingPage() {
         </section>
 
         <div className="py-12 sm:py-14">
-          <FaqSection />
+          <Suspense fallback={null}>
+            <FaqSection />
+          </Suspense>
         </div>
 
       </main>
