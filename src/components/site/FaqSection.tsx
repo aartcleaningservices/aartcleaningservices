@@ -12,7 +12,7 @@ export const faqs = [
   },
   {
     q: "Do I need to provide cleaning supplies?",
-    a: "No. Our cleaners arrive with their own tools and standard supplies. If you prefer specific products for delicate surfaces or allergies, leave them out and tell us on our WhatsApp.",
+    a: "Our cleaners will use your own tools and available supplies. If you prefer specific products for delicate surfaces or allergies, leave them out and tell us on our WhatsApp.",
   },
   {
     q: "Can I book a same-day cleaning?",
