@@ -72,6 +72,10 @@ export const Route = createFileRoute("/")({
           "@id": "https://aartcleaning.my/#business",
           name: BUSINESS.name,
           legalName: BUSINESS.name,
+          "image": [
+            "https://aartcleaning.my/Banner.png",
+            "https://aartcleaning.my/icon.png"
+          ],
           description: DESCRIPTION,
           telephone: BUSINESS.phone,
           email: BUSINESS.email,
