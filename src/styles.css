@@ -79,40 +79,41 @@
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.985 0.008 120);
-  --foreground: oklch(0.24 0.03 190);
+  --background: oklch(0.985 0.006 205);
+  --foreground: oklch(0.26 0.028 205);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.03 190);
+  --card-foreground: oklch(0.26 0.028 205);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.03 190);
-  --primary: oklch(0.5 0.096 195);
-  --primary-foreground: oklch(0.99 0.01 120);
-  --primary-glow: oklch(0.66 0.11 190);
-  --secondary: oklch(0.94 0.024 175);
-  --secondary-foreground: oklch(0.32 0.05 195);
-  --muted: oklch(0.955 0.012 140);
-  --muted-foreground: oklch(0.51 0.024 195);
+  --popover-foreground: oklch(0.26 0.028 205);
+  /* Logo turquoise */
+  --primary: oklch(0.6 0.098 203);
+  --primary-foreground: oklch(0.99 0.008 205);
+  --primary-glow: oklch(0.76 0.084 202);
+  --secondary: oklch(0.945 0.026 203);
+  --secondary-foreground: oklch(0.35 0.055 204);
+  --muted: oklch(0.958 0.014 205);
+  --muted-foreground: oklch(0.52 0.026 205);
   /* Yellow gold accent */
   --accent: oklch(0.83 0.16 92);
   --accent-foreground: oklch(0.27 0.05 90);
   --destructive: oklch(0.577 0.21 27.325);
-  --destructive-foreground: oklch(0.99 0.005 120);
-  --border: oklch(0.9 0.016 175);
-  --input: oklch(0.88 0.018 175);
-  --ring: oklch(0.5 0.096 195);
-  --chart-1: oklch(0.5 0.096 195);
-  --chart-2: oklch(0.66 0.11 190);
+  --destructive-foreground: oklch(0.99 0.005 205);
+  --border: oklch(0.905 0.018 203);
+  --input: oklch(0.885 0.02 203);
+  --ring: oklch(0.6 0.098 203);
+  --chart-1: oklch(0.6 0.098 203);
+  --chart-2: oklch(0.76 0.084 202);
   --chart-3: oklch(0.83 0.16 92);
   --chart-4: oklch(0.72 0.1 150);
-  --chart-5: oklch(0.4 0.06 200);
-  --sidebar: oklch(0.985 0.008 120);
-  --sidebar-foreground: oklch(0.24 0.03 190);
-  --sidebar-primary: oklch(0.5 0.096 195);
-  --sidebar-primary-foreground: oklch(0.99 0.01 120);
-  --sidebar-accent: oklch(0.94 0.024 175);
-  --sidebar-accent-foreground: oklch(0.32 0.05 195);
-  --sidebar-border: oklch(0.9 0.016 175);
-  --sidebar-ring: oklch(0.5 0.096 195);
+  --chart-5: oklch(0.45 0.072 207);
+  --sidebar: oklch(0.985 0.006 205);
+  --sidebar-foreground: oklch(0.26 0.028 205);
+  --sidebar-primary: oklch(0.6 0.098 203);
+  --sidebar-primary-foreground: oklch(0.99 0.008 205);
+  --sidebar-accent: oklch(0.945 0.026 203);
+  --sidebar-accent-foreground: oklch(0.35 0.055 204);
+  --sidebar-border: oklch(0.905 0.018 203);
+  --sidebar-ring: oklch(0.6 0.098 203);
 
   --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -120,18 +121,18 @@
 
   --gradient-deep: linear-gradient(
     135deg,
-    oklch(0.36 0.07 200) 0%,
-    oklch(0.5 0.096 195) 55%,
-    oklch(0.62 0.1 178) 100%
+    oklch(0.52 0.088 207) 0%,
+    oklch(0.63 0.1 203) 55%,
+    oklch(0.78 0.082 201) 100%
   );
   --gradient-soft: linear-gradient(
     180deg,
     oklch(1 0 0) 0%,
-    oklch(0.955 0.012 140) 100%
+    oklch(0.955 0.016 205) 100%
   );
-  --shadow-soft: 0 1px 2px oklch(0.24 0.03 190 / 0.06),
-    0 10px 30px -12px oklch(0.24 0.03 190 / 0.16);
-  --shadow-lift: 0 24px 60px -24px oklch(0.24 0.03 190 / 0.3);
+  --shadow-soft: 0 1px 2px oklch(0.26 0.028 205 / 0.06),
+    0 10px 30px -12px oklch(0.26 0.028 205 / 0.16);
+  --shadow-lift: 0 24px 60px -24px oklch(0.26 0.028 205 / 0.3);
 }
 
 
@@ -190,8 +191,8 @@
 /* Per-service accent tints used by the home page service cards. */
 :root {
   /* Home (Teal - Fresh & Clean) */
-  --service-home: oklch(0.93 0.06 195);
-  --service-home-ink: oklch(0.35 0.08 195);
+  --service-home: oklch(0.93 0.06 203);
+  --service-home-ink: oklch(0.36 0.08 204);
   
   /* Office (Blue - Professional & Reliable) */
   --service-office: oklch(0.93 0.06 255);
@@ -231,7 +232,7 @@
   border-color: color-mix(in oklab, var(--svc) 80%, var(--color-foreground) 20%);
   transform: translateY(-3px);
   box-shadow:
-    0 1px 2px oklch(0.24 0.03 190 / 0.06),
+    0 1px 2px oklch(0.26 0.028 205 / 0.06),
     0 14px 32px -16px color-mix(in oklab, var(--svc) 70%, transparent);
 }
 

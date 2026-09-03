@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { FaWhatsapp } from "./WhatsAppIcon";
 import { BUSINESS, services } from "@/lib/services";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,13 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-lg">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold">
-          <span className="grid size-9 place-items-center rounded-xl bg-gradient-deep text-primary-foreground">
-            <Sparkles className="size-4" />
-          </span>
+          <img
+            src="/icon.png"
+            alt="Aart Cleaning Services logo"
+            width={36}
+            height={36}
+            className="size-9 rounded-xl"
+          />
           <span className="leading-none">
             Aart
             <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
